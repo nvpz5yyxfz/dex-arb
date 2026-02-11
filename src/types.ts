@@ -1,38 +1,17 @@
-export interface FundingRateData {
+export const EXCHANGE_NAMES = ['Extended', 'EdgeX', 'Pacifica', 'GRVT', 'Variational'] as const;
+export type ExchangeName = (typeof EXCHANGE_NAMES)[number];
+
+export interface ExchangeRate {
+  rate: number;              // annualized %
+  nextFundingTime: number;   // epoch ms (0 if unknown)
+  intervalHours: number;     // funding interval in hours
+}
+
+export interface AssetRow {
   asset: string;
-  extended: number | null;  // annualized %
-  edgex: number | null;     // annualized %
+  exchanges: Partial<Record<ExchangeName, ExchangeRate>>;
   maxArbitrage: number | null;
-  starred: boolean;
 }
 
-export interface EdgeXFundingResponse {
-  code: string;
-  data: {
-    dataList: Array<{
-      contractId: string;
-      fundingRate: string;
-      fundingRateIntervalMin: string;
-      predictedFundingRate: string;
-      previousFundingRate: string;
-      forecastFundingRate: string;
-      indexPrice: string;
-    }>;
-  };
-}
-
-export interface ExtendedMarketStatsResponse {
-  status: string;
-  data: {
-    fundingRate: string;
-    nextFundingRate: number;
-    lastPrice: string;
-    markPrice: string;
-    indexPrice: string;
-    openInterest: string;
-    dailyVolume: string;
-  };
-}
-
-export type SortField = 'asset' | 'maxArbitrage' | 'extended' | 'edgex';
+export type SortField = 'asset' | 'maxArbitrage' | ExchangeName;
 export type SortDirection = 'asc' | 'desc';

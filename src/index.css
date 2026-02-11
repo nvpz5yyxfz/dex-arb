@@ -26,14 +26,13 @@
   --red-bg: #ff6b6b15;
   --yellow: #f5c842;
   --blue: #4a9eff;
-  --purple: #a78bfa;
 
   --font-mono: 'SF Mono', 'Fira Code', 'Cascadia Code', 'JetBrains Mono', monospace;
   --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif;
 }
 
 html {
-  font-size: 14px;
+  font-size: 13px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -57,9 +56,9 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  max-width: 960px;
+  max-width: 1280px;
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0 16px;
   width: 100%;
 }
 
@@ -68,46 +67,45 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 24px 0 16px;
+  padding: 16px 0 12px;
   border-bottom: 1px solid var(--border-color);
-  flex-wrap: wrap;
   gap: 12px;
 }
 
 .header-left {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
 }
 
 .app-title {
-  font-size: 1.35rem;
+  font-size: 1.15rem;
   font-weight: 700;
   color: var(--text-primary);
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   letter-spacing: -0.02em;
 }
 
 .title-icon {
-  font-size: 1.2rem;
+  font-size: 1rem;
   color: var(--blue);
 }
 
 .app-subtitle {
-  font-size: 0.85rem;
+  font-size: 0.78rem;
   color: var(--text-muted);
 }
 
 .header-right {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
 }
 
 .last-updated {
-  font-size: 0.78rem;
+  font-size: 0.75rem;
   color: var(--text-muted);
   font-family: var(--font-mono);
 }
@@ -115,16 +113,14 @@ body {
 .refresh-button {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 14px;
+  justify-content: center;
+  padding: 6px;
   border: 1px solid var(--border-color);
   border-radius: 6px;
   background: var(--bg-secondary);
   color: var(--text-secondary);
-  font-size: 0.8rem;
   cursor: pointer;
   transition: all 0.15s ease;
-  font-family: var(--font-sans);
 }
 
 .refresh-button:hover {
@@ -147,53 +143,28 @@ body {
   to { transform: rotate(360deg); }
 }
 
-/* === Info Bar === */
-.info-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 0;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.info-text {
-  font-size: 0.78rem;
-  color: var(--text-muted);
-}
-
-.info-badge {
-  font-size: 0.72rem;
-  color: var(--green);
-  background: var(--green-bg);
-  padding: 3px 10px;
-  border-radius: 12px;
-  font-weight: 500;
-  letter-spacing: 0.02em;
-}
-
 /* === Error === */
 .error-banner {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 16px;
-  margin-top: 12px;
+  padding: 8px 14px;
+  margin-top: 8px;
   background: var(--red-bg);
   border: 1px solid #ff6b6b30;
-  border-radius: 8px;
+  border-radius: 6px;
   color: var(--red);
-  font-size: 0.85rem;
+  font-size: 0.8rem;
 }
 
 .error-banner button {
-  padding: 4px 12px;
+  padding: 3px 10px;
   background: var(--red);
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
 }
 
 /* === Loading === */
@@ -208,8 +179,8 @@ body {
 }
 
 .loading-spinner {
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   border: 3px solid var(--border-color);
   border-top-color: var(--blue);
   border-radius: 50%;
@@ -220,28 +191,31 @@ body {
 .table-container {
   overflow-x: auto;
   border: 1px solid var(--border-color);
-  border-radius: 10px;
+  border-radius: 8px;
   background: var(--bg-secondary);
 }
 
 .funding-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
 }
 
 .funding-table thead {
   background: var(--bg-tertiary);
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
 .funding-table th {
-  padding: 12px 16px;
+  padding: 8px 10px;
   text-align: left;
   font-weight: 600;
-  font-size: 0.78rem;
+  font-size: 0.7rem;
   color: var(--text-muted);
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.05em;
   border-bottom: 1px solid var(--border-color);
   white-space: nowrap;
   user-select: none;
@@ -257,42 +231,42 @@ body {
 }
 
 .th-star {
-  width: 48px;
+  width: 36px;
   text-align: center;
 }
 
 .th-asset {
-  min-width: 120px;
+  min-width: 80px;
 }
 
 .th-arbitrage {
   text-align: right;
-  min-width: 140px;
+  min-width: 90px;
 }
 
 .th-exchange {
   text-align: right;
-  min-width: 140px;
+  min-width: 120px;
 }
 
 .exchange-header {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
 }
 
 .exchange-icon {
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
   vertical-align: middle;
 }
 
 .sort-icon {
-  font-size: 0.65rem;
+  font-size: 0.6rem;
   color: var(--text-muted);
   opacity: 0.3;
-  margin-left: 4px;
+  margin-left: 3px;
 }
 
 .sort-icon.active {
@@ -318,25 +292,21 @@ body {
   background-color: var(--bg-starred);
 }
 
-.funding-table tbody tr.row-starred:hover {
-  background-color: var(--bg-hover);
-}
-
 .funding-table td {
-  padding: 14px 16px;
+  padding: 6px 10px;
   vertical-align: middle;
 }
 
 .td-star {
   text-align: center;
-  width: 48px;
+  width: 36px;
 }
 
 .star-button {
   background: none;
   border: none;
   cursor: pointer;
-  padding: 4px;
+  padding: 2px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -348,32 +318,11 @@ body {
   transform: scale(1.2);
 }
 
-.star-button:active {
-  transform: scale(0.95);
-}
-
 /* === Asset Cell === */
-.asset-cell {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.asset-icon {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-}
-
 .asset-name {
   font-weight: 600;
   color: var(--text-primary);
-  font-size: 0.95rem;
-}
-
-.asset-pair {
-  color: var(--text-muted);
-  font-size: 0.78rem;
+  font-size: 0.85rem;
 }
 
 /* === Rate Cells === */
@@ -385,24 +334,34 @@ body {
   font-family: var(--font-mono);
   font-weight: 500;
   color: var(--text-secondary);
-  font-size: 0.9rem;
+  font-size: 0.82rem;
 }
 
 .arb-highlight {
   font-family: var(--font-mono);
   font-weight: 600;
   color: var(--yellow);
-  font-size: 0.9rem;
+  font-size: 0.82rem;
   background: #f5c84215;
-  padding: 2px 8px;
-  border-radius: 4px;
+  padding: 1px 6px;
+  border-radius: 3px;
 }
 
 .td-rate {
   text-align: right;
   font-family: var(--font-mono);
+  font-size: 0.82rem;
+}
+
+.rate-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1px;
+}
+
+.rate-value {
   font-weight: 500;
-  font-size: 0.9rem;
 }
 
 .rate-positive {
@@ -417,44 +376,51 @@ body {
   color: var(--text-muted);
 }
 
-/* === Footer === */
-.app-footer {
-  padding: 20px 0;
-  text-align: center;
-  font-size: 0.75rem;
+.rate-empty {
   color: var(--text-muted);
-  margin-top: auto;
-  border-top: 1px solid var(--border-color);
+  opacity: 0.3;
+}
+
+/* === Countdown === */
+.countdown {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  letter-spacing: 0.02em;
+  opacity: 0.7;
+}
+
+/* === Table Footer === */
+.table-footer {
+  padding: 8px 10px;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  border-top: 1px solid var(--border-subtle);
+  text-align: right;
 }
 
 .app-main {
   flex: 1;
-  padding: 0 0 24px;
+  padding: 12px 0 24px;
 }
 
 /* === Responsive === */
-@media (max-width: 640px) {
+@media (max-width: 900px) {
+  html {
+    font-size: 12px;
+  }
+
   .app {
-    padding: 0 12px;
-  }
-
-  .app-header {
-    padding: 16px 0 12px;
-  }
-
-  .app-title {
-    font-size: 1.1rem;
+    padding: 0 8px;
   }
 
   .funding-table th,
   .funding-table td {
-    padding: 10px 10px;
-    font-size: 0.82rem;
+    padding: 6px 6px;
   }
 
-  .th-arbitrage,
   .th-exchange {
-    min-width: 100px;
+    min-width: 85px;
   }
 
   .exchange-icon {

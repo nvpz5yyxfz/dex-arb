@@ -17,6 +17,24 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/api\/extended/, '/api'),
         secure: true,
       },
+      '/api/pacifica': {
+        target: 'https://api.pacifica.fi',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/pacifica/, '/api'),
+        secure: true,
+      },
+      '/api/grvt': {
+        target: 'https://market-data.grvt.io',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/grvt/, ''),
+        secure: true,
+      },
+      '/api/variational': {
+        target: 'https://omni-client-api.prod.ap-northeast-1.variational.io',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/variational/, ''),
+        secure: true,
+      },
     },
   },
 })

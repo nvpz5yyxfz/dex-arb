@@ -15,19 +15,19 @@ function App() {
             Funding Arbitrage
           </h1>
           <span className="app-subtitle">
-            Compare perpetual funding rates across exchanges
+            Perpetual funding rates across DEX exchanges &middot; annualized APR
           </span>
         </div>
         <div className="header-right">
           {lastUpdated && (
             <span className="last-updated">
-              Updated {lastUpdated.toLocaleTimeString()}
+              {lastUpdated.toLocaleTimeString()}
             </span>
           )}
           <button className="refresh-button" onClick={refresh} disabled={loading}>
             <svg
-              width="16"
-              height="16"
+              width="14"
+              height="14"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -40,7 +40,6 @@ function App() {
               <polyline points="1 20 1 14 7 14" />
               <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
             </svg>
-            Refresh
           </button>
         </div>
       </header>
@@ -53,14 +52,6 @@ function App() {
       )}
 
       <main className="app-main">
-        <div className="info-bar">
-          <span className="info-text">
-            Funding rates annualized (APR %). Arbitrage = spread between best long/short across exchanges.
-          </span>
-          <span className="info-badge">
-            Live &bull; Auto-refresh 60s
-          </span>
-        </div>
         <FundingTable
           data={data}
           loading={loading}
@@ -68,10 +59,6 @@ function App() {
           onToggleStar={toggleStar}
         />
       </main>
-
-      <footer className="app-footer">
-        <span>Data sourced from Extended &amp; EdgeX exchanges</span>
-      </footer>
     </div>
   );
 }
