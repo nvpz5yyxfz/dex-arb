@@ -1,14 +1,15 @@
 # Funding Arbitrage Dashboard
 
-A web application for comparing perpetual futures funding rates across crypto exchanges to identify arbitrage opportunities.
+A web application for comparing perpetual futures funding rates across crypto DEX exchanges to identify arbitrage opportunities.
 
 ## Features
 
-- Real-time funding rates from **Extended** and **EdgeX** exchanges
-- Tracks **BTC**, **SOL**, **BERA** perpetual contracts
+- Real-time funding rates from **5 exchanges**: Extended, EdgeX, Pacifica, GRVT, Variational
+- Dynamically discovers **all available assets** across exchanges
 - Funding rates normalized to **annualized percentage (APR)**
+- **Countdown timer** next to each rate showing time until next funding payment
 - Star/favorite assets to pin them to the top of the table
-- Sortable columns (asset, max arbitrage, exchange rates)
+- Sortable columns (asset, max arbitrage, any exchange)
 - Auto-refresh every 60 seconds
 - Dark theme UI
 
@@ -33,10 +34,19 @@ npm run server
 - **Frontend**: React + TypeScript + Vite
 - **Backend**: Express server proxies exchange API calls to handle CORS
 - **Data Sources**:
-  - EdgeX: `pro.edgex.exchange/api/v1/public/funding/getFundingRatePage`
-  - Extended: `api.starknet.extended.exchange/api/v1/info/markets/{market}/stats` ([API docs](https://api.docs.extended.exchange/))
+  | Exchange | API | Interval | Rate Format |
+  |---|---|---|---|
+  | Extended | `api.starknet.extended.exchange/api/v1/info/markets` | 1h | decimal per 1h |
+  | EdgeX | `pro.edgex.exchange/api/v1/public/funding/getFundingRatePage` | 4h | decimal per interval |
+  | Pacifica | `api.pacifica.fi/api/v1/info/prices` | 1h | decimal per 1h |
+  | GRVT | `market-data.grvt.io/full/v1/ticker` (POST) | 8h | % per 8h |
+  | Variational | `omni-client-api...variational.io/metadata/stats` | varies | annualized decimal |
 
 ## Annualization
 
-- **EdgeX**: Funding rate is per funding interval (typically 4 hours / 240 min). Annualized = `rate * (525600 / intervalMin) * 100`
-- **Extended**: Funding rate is per 1 hour. Annualized = `rate * 8760 * 100`
+All rates are converted to annualized percentage:
+- **1h rates**: `rate * 8760 * 100`
+- **4h rates**: `rate * 2190 * 100`
+- **8h rates** (EdgeX): `rate * (525600 / intervalMin) * 100`
+- **8h % rates** (GRVT): `rate * 1095`
+- **Annualized decimal** (Variational): `rate * 100`
