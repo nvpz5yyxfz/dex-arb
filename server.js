@@ -34,11 +34,11 @@ app.get('/api/edgex/*', async (req, res) => {
   }
 });
 
-// Proxy for Extended API
+// Proxy for Extended API (api.starknet.extended.exchange)
 app.get('/api/extended/*', async (req, res) => {
   try {
     const targetPath = req.originalUrl.replace(/^\/api\/extended/, '/api');
-    const url = `https://starknet.app.extended.exchange${targetPath}`;
+    const url = `https://api.starknet.extended.exchange${targetPath}`;
     const response = await fetch(url, {
       headers: {
         'Accept': 'application/json',

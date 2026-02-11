@@ -12,7 +12,7 @@ export default defineConfig({
         secure: true,
       },
       '/api/extended': {
-        target: 'https://starknet.app.extended.exchange',
+        target: 'https://api.starknet.extended.exchange',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api\/extended/, '/api'),
         secure: true,

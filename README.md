@@ -34,7 +34,7 @@ npm run server
 - **Backend**: Express server proxies exchange API calls to handle CORS
 - **Data Sources**:
   - EdgeX: `pro.edgex.exchange/api/v1/public/funding/getFundingRatePage`
-  - Extended: `starknet.app.extended.exchange/api/v1/funding-rates-stats`
+  - Extended: `api.starknet.extended.exchange/api/v1/info/markets/{market}/stats` ([API docs](https://api.docs.extended.exchange/))
 
 ## Annualization
 

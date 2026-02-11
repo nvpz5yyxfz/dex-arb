@@ -21,23 +21,17 @@ export interface EdgeXFundingResponse {
   };
 }
 
-export interface ExtendedFundingItem {
-  market: string;
-  timestamp: number;
-  x10OpenInterest: number;
-  x10FundingRate: number;
-  binanceFundingRate: number | null;
-  binanceX10FundingRate: number | null;
-  bybitFundingRate: number | null;
-  bybitX10FundingRate: number | null;
-  okxFundingRate: number | null;
-  okxX10FundingRate: number | null;
-  hyperliquidFundingRate: number | null;
-  hyperliquidX10FundingRate: number | null;
-  lighterFundingRate: number | null;
-  lighterX10FundingRate: number | null;
-  paradexFundingRate: number | null;
-  paradexX10FundingRate: number | null;
+export interface ExtendedMarketStatsResponse {
+  status: string;
+  data: {
+    fundingRate: string;
+    nextFundingRate: number;
+    lastPrice: string;
+    markPrice: string;
+    indexPrice: string;
+    openInterest: string;
+    dailyVolume: string;
+  };
 }
 
 export type SortField = 'asset' | 'maxArbitrage' | 'extended' | 'edgex';

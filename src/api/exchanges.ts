@@ -1,4 +1,4 @@
-import type { EdgeXFundingResponse, ExtendedFundingItem } from '../types';
+import type { EdgeXFundingResponse, ExtendedMarketStatsResponse } from '../types';
 
 // EdgeX contract IDs for the assets we track
 const EDGEX_CONTRACTS: Record<string, string> = {
@@ -7,7 +7,7 @@ const EDGEX_CONTRACTS: Record<string, string> = {
   BERA: '10000063',
 };
 
-// Extended market names
+// Extended market names (per https://api.docs.extended.exchange/)
 const EXTENDED_MARKETS: Record<string, string> = {
   BTC: 'BTC-USD',
   SOL: 'SOL-USD',
@@ -18,16 +18,17 @@ const EXTENDED_MARKETS: Record<string, string> = {
 export const ASSETS = ['BTC', 'SOL', 'BERA'];
 
 // EdgeX: funding rate is per interval (fundingRateIntervalMin, typically 240 min = 4h)
-// Annualized = rate * (365 * 24 * 60 / intervalMin)
+// Annualized = rate * (365 * 24 * 60 / intervalMin) * 100
 function annualizeEdgeX(rate: number, intervalMin: number): number {
   const periodsPerYear = (365 * 24 * 60) / intervalMin;
-  return rate * periodsPerYear * 100; // convert to percentage
+  return rate * periodsPerYear * 100;
 }
 
-// Extended: funding rate is per 1 hour
-// Annualized = rate * 8760 (365 * 24)
+// Extended: funding rate is per 1 hour (calculated every minute, applied hourly)
+// Per docs: "the funding rate is calculated every minute, it is only applied once per hour"
+// Annualized = rate * 8760 * 100 (365 * 24 hours/year)
 function annualizeExtended(rate: number): number {
-  return rate * 8760 * 100; // convert to percentage
+  return rate * 8760 * 100;
 }
 
 export async function fetchEdgeXFundingRates(): Promise<Record<string, number>> {
@@ -58,25 +59,33 @@ export async function fetchEdgeXFundingRates(): Promise<Record<string, number>> 
   return results;
 }
 
+// Extended API: GET /api/v1/info/markets/{market}/stats
+// Base URL: https://api.starknet.extended.exchange
+// Proxied through: /api/extended/v1/info/markets/{market}/stats
 export async function fetchExtendedFundingRates(): Promise<Record<string, number>> {
   const results: Record<string, number> = {};
 
-  try {
-    const response = await fetch('/api/extended/v1/funding-rates-stats');
-    const data: ExtendedFundingItem[] = await response.json();
+  const fetches = ASSETS.map(async (asset) => {
+    const marketName = EXTENDED_MARKETS[asset];
+    if (!marketName) return;
 
-    if (Array.isArray(data)) {
-      for (const asset of ASSETS) {
-        const marketName = EXTENDED_MARKETS[asset];
-        const item = data.find((d) => d.market === marketName);
-        if (item && item.x10FundingRate != null) {
-          results[asset] = annualizeExtended(item.x10FundingRate);
+    try {
+      const response = await fetch(
+        `/api/extended/v1/info/markets/${marketName}/stats`
+      );
+      const data: ExtendedMarketStatsResponse = await response.json();
+
+      if (data.status === 'OK' && data.data?.fundingRate != null) {
+        const rate = parseFloat(data.data.fundingRate);
+        if (!isNaN(rate)) {
+          results[asset] = annualizeExtended(rate);
         }
       }
+    } catch (error) {
+      console.error(`Failed to fetch Extended funding rate for ${asset}:`, error);
     }
-  } catch (error) {
-    console.error('Failed to fetch Extended funding rates:', error);
-  }
+  });
 
+  await Promise.all(fetches);
   return results;
 }
