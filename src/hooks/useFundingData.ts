@@ -6,48 +6,53 @@ const REFRESH_INTERVAL = 60_000;
 
 function computeMaxArbitrage(row: AssetRow): number | null {
   const rates: number[] = [];
-  for (const key of (['Extended', 'EdgeX', 'Pacifica', 'GRVT', 'Variational'] as ExchangeName[])) {
-    const ex = row.exchanges[key];
+  for (const ex of Object.values(row.exchanges)) {
     if (ex) rates.push(ex.rate);
   }
   if (rates.length < 2) return null;
-  const max = Math.max(...rates);
-  const min = Math.min(...rates);
-  return Math.abs(max - min);
+  return Math.abs(Math.max(...rates) - Math.min(...rates));
 }
 
-export function useFundingData() {
+function computeTotalOI(row: AssetRow): number {
+  let total = 0;
+  for (const ex of Object.values(row.exchanges)) {
+    if (ex) total += ex.openInterest;
+  }
+  return total;
+}
+
+export function useFundingData(enabledExchanges: Set<ExchangeName>) {
   const [data, setData] = useState<AssetRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
 
+  // Serialize enabledExchanges to a string for useCallback/useEffect deps
+  const enabledKey = [...enabledExchanges].sort().join(',');
+
   const fetchData = useCallback(async () => {
     try {
-      const { ratesByExchange, allAssets } = await fetchAllFundingRates();
+      setLoading(true);
+      const { ratesByExchange, allAssets } = await fetchAllFundingRates(enabledExchanges);
 
       const rows: AssetRow[] = allAssets.map((asset) => {
         const exchanges: AssetRow['exchanges'] = {};
-        for (const exName of (['Extended', 'EdgeX', 'Pacifica', 'GRVT', 'Variational'] as const)) {
-          const rateMap = ratesByExchange[exName];
+        for (const [exName, rateMap] of Object.entries(ratesByExchange)) {
           if (rateMap) {
             const entry = rateMap.get(asset);
             if (entry) {
-              exchanges[exName] = entry;
+              exchanges[exName as ExchangeName] = entry;
             }
           }
         }
 
-        const row: AssetRow = { asset, exchanges, maxArbitrage: null };
+        const row: AssetRow = { asset, exchanges, maxArbitrage: null, totalOI: 0 };
         row.maxArbitrage = computeMaxArbitrage(row);
+        row.totalOI = computeTotalOI(row);
         return row;
       });
 
-      // Filter: only show assets that appear on at least 1 exchange
-      const filtered = rows.filter(
-        (r) => Object.keys(r.exchanges).length > 0
-      );
-
+      const filtered = rows.filter(r => Object.keys(r.exchanges).length > 0);
       setData(filtered);
       setError(null);
       setLastUpdated(new Date());
@@ -57,7 +62,8 @@ export function useFundingData() {
     } finally {
       setLoading(false);
     }
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [enabledKey]);
 
   useEffect(() => {
     fetchData();
